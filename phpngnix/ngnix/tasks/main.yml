@@ -1,0 +1,53 @@
+---
+# tasks file for ngnix
+- name: Add repo
+  yum:
+    name: epel-release
+    state: present
+
+- name: Insert hostname
+  shell: hostnamectl set-hostname centos01
+  become: true
+
+- name: Add user nginx
+  user:
+    force: true
+    name: nginx
+    groups: nginx
+    create_home: false
+  
+- name: Install nginx
+  yum:
+    name: nginx
+    state: present
+
+- name: Install include /etc/nginx/conf.d/*.conf;
+  template:
+    src:   def_nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    mode: '0600'
+  notify: Restart Nginx
+
+- name: Recursively change /opt/nginx/ansible/
+  ansible.builtin.file:
+    path: "{{document_root}}"
+    state: directory
+    recurse: yes
+    owner: nginx
+    group: nginx
+
+- name: Create directory for php /web/sites
+  shell:  mkdir -p /web && mkdir -p /web/sites && mkdir -p {{document_root}} && mkdir -p {{document_root}}/www && mkdir -p {{document_root}}/log && mkdir -p {{document_root}}/pma.{{server_name}} && mkdir -p {{document_root}}/pma.{{server_name}}/www && mkdir -p {{document_root}}/pma.{{server_name}}/log
+
+- name: Copy index.html
+  copy: 
+    src: files/index.php 
+    dest: "{{document_root}}"
+  notify: Restart Nginx
+
+- name: Install configuration file
+  template:
+    src:   etc_ngnix.conf.j2
+    dest: /etc/nginx/conf.d/{{ server_name }}.conf
+    mode: '0600'
+  notify: Restart Nginx

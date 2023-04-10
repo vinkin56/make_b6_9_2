@@ -1,0 +1,20 @@
+---
+# defaults file for dnsmasq
+dnsmasq_domain_needed: false
+dnsmasq_bogus_priv: true
+dnsmasq_authoritative: false
+dnsmasq_expand_hosts: false
+dnsmasq_listen_address: '192.168.10.33'
+dnsmasq_domain: 'aktivsoft.local'
+dnsmasq_dhcp_ranges:
+  - start_addr: '192.168.30.150'
+    end_addr: '192.168.30.253'
+    lease_time: '8h'
+dnsmasq_option_router: '192.168.6.254'
+dnsmasq_upstream_servers:
+  - 8.8.8.8
+  - 8.8.4.4
+dnsmasq_srv_hosts:
+  - name: _ldap._tcp.aktivsoft.net
+    target: 'myserver.aktivsoft.net'
+    port: 389

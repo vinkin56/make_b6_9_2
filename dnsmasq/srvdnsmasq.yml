@@ -1,0 +1,8 @@
+---
+- name: Install dnsmasq
+  hosts: myservers
+  gather_facts: yes
+  become: 'yes'
+
+  roles:
+  - dnsmasq

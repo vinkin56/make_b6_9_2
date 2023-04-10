@@ -1,0 +1,4 @@
+---
+# vars file for ngnix
+server_name: "{{ ansible_fqdn }}"
+document_root: /opt/nginx/ansible

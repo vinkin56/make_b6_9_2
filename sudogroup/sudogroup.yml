@@ -1,0 +1,42 @@
+---
+- name: Install Vsftpd
+  hosts: myservers
+  gather_facts: yes
+  become: 'yes'
+
+  tasks:
+
+    - name: Add a group called superusers
+      group:
+        name: superusers
+        state: present
+    
+    - name: Add users
+      user:
+        name: "{{item}}"
+        groups: superusers
+        append: 'yes'
+        create_home: 'yes'
+      with_items:
+        - user2
+        - user3
+
+    - name: Add group "superusers" to sudo
+      lineinfile:
+        path: /etc/sudoers.d/superusers
+        line: '%superusers ALL=(ALL) NOPASSWD: ALL'
+        state: present
+        mode: 0440
+        create: yes
+        validate: 'visudo -cf %s'
+    
+    - name: insert authorized key
+      ansible.posix.authorized_key:
+        user: "{{item}}"
+        state: present
+        key: '{{ lookup(''file'', ''/home/sorokinav/.ssh/vinkin.pub'') }}'
+      with_items:
+        - user2
+        - user3
+
+

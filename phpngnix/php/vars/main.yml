@@ -1,0 +1,3 @@
+---
+# vars file for php
+server_name: "{{ ansible_fqdn }}"

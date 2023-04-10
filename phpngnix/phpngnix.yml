@@ -1,0 +1,10 @@
+---
+- name: Install phpngnix
+  hosts: myservers
+  gather_facts: yes
+  become: 'yes'
+
+  roles:
+    - ngnix
+    - php
+

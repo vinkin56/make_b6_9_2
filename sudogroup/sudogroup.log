@@ -1,0 +1,34 @@
+[sorokinav@server01 sudogroup]$ ansible-playbook sudogroup.yml
+
+PLAY [Install Vsftpd] **********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [158.160.34.245]
+
+TASK [Add a group called superusers] *******************************************
+ok: [158.160.34.245]
+
+TASK [Add users] ***************************************************************
+ok: [158.160.34.245] => (item=user2)
+ok: [158.160.34.245] => (item=user3)
+
+TASK [Add group "superusers" to sudo] ******************************************
+ok: [158.160.34.245]
+
+TASK [insert authorized key] ***************************************************
+changed: [158.160.34.245] => (item=user2)
+changed: [158.160.34.245] => (item=user3)
+
+PLAY RECAP *********************************************************************
+158.160.34.245             : ok=5    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[sorokinav@server01 sudogroup]$ ssh user2@158.160.34.245
+Last failed login: Fri Apr  7 15:17:47 UTC 2023 on pts/0
+There were 13 failed login attempts since the last successful login.
+[user2@fhm1s7r8e49n1at2lpg8 ~]$ sudo -i
+[root@fhm1s7r8e49n1at2lpg8 ~]# exit
+logout
+[user2@fhm1s7r8e49n1at2lpg8 ~]$ exit
+logout
+Connection to 158.160.34.245 closed.
+[sorokinav@server01 sudogroup]$ 
